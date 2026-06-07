@@ -64,8 +64,8 @@ EdomApp adalah platform web yang memungkinkan mahasiswa memberikan **rating dan 
  
 **1. Clone repository**
 ```bash
-git clone https://github.com/username/ratemyclass.git
-cd ratemyclass
+git clone https://github.com/Dipszi6/edomApp.git
+cd edomApp
 ```
  
 **2. Install dependencies**
