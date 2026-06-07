@@ -82,20 +82,20 @@ php artisan key:generate
  
 Edit file `.env`:
 ```env
-APP_NAME=RateMyClass
+APP_NAME=EdomApp
 APP_URL=http://localhost:8000
  
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=ratemyclass
+DB_DATABASE=edom_db
 DB_USERNAME=root
 DB_PASSWORD=
 ```
  
 **4. Buat database**
 ```sql
-CREATE DATABASE ratemyclass;
+CREATE DATABASE edom_db;
 ```
  
 **5. Jalankan migration & seeder**
