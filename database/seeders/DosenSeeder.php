@@ -25,11 +25,18 @@ class DosenSeeder extends Seeder
                 'jurusan_id' => 1,
             ],
             [
-                'user_id' => null,
+                'user_id' => 4,
                 'nidn' => '0034567803',
                 'nama' => 'Ahmad Fauzi',
                 'gelar' => 'Dr., S.Si., M.Sc.',
                 'jurusan_id' => 4,
+            ],
+            [
+                'user_id' => null,
+                'nidn' => '0034567804',
+                'nama' => 'Jarot Ujang',
+                'gelar' => 'Ir.,Dr., S.Kom., M.Kom.',
+                'jurusan_id' => 2,
             ],
         ];
 
