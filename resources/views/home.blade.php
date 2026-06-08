@@ -285,7 +285,7 @@
 
     <!-- ─── FOOTER ─── -->
     <footer>
-        <div class="footer-logo">Rate<span>My</span>Class</div>
+        <div class="footer-logo">EDOM<span> UPS </span>Tegal</div>
         <nav>
             <a href="/search">Cari Dosen</a>
             <a href="/login">Masuk</a>
