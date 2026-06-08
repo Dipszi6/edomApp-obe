@@ -65,7 +65,7 @@ EdomApp adalah platform web yang memungkinkan mahasiswa memberikan **rating dan 
 **1. Clone repository**
 ```bash
 git clone https://github.com/Dipszi6/edomApp.git
-cd edomApp
+cd edomApp-obe
 ```
  
 **2. Install dependencies**
@@ -82,7 +82,7 @@ php artisan key:generate
  
 Edit file `.env`:
 ```env
-APP_NAME=EdomApp
+APP_NAME=EdomApp-obe
 APP_URL=http://localhost:8000
  
 DB_CONNECTION=mysql
