@@ -20,14 +20,14 @@
 
     <!-- ─── NAVBAR ─── -->
     <nav>
-        <a href="/" class="nav-logo">Rate<span>My</span>Class</a>
+        <a href="/" class="nav-logo">EDOM<span> UPS </span>Tegal</a>
         <ul class="nav-links">
             <li><a href="/search">Cari Dosen</a></li>
             <li><a href="/search?type=matkul">Mata Kuliah</a></li>
             <li><a href="#cara-kerja">Cara Kerja</a></li>
         </ul>
         <div class="nav-cta">
-            <a href="/login" class="btn-ghost">Masuk</a>
+            <a href="{{ route('login') }}" class="btn-ghost">Masuk</a>
             <a href="/register" class="btn-primary">Daftar</a>
         </div>
     </nav>

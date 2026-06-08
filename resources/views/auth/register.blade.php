@@ -1,52 +1,210 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="id">
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - EDOM UPS Tegal</title>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap"
+          rel="stylesheet">
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+    @vite([
+        'resources/css/home.css',
+        'resources/js/home.js'
+    ])
+</head>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+<body>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+    {{-- Background --}}
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+    {{-- Navbar --}}
+    <nav>
+        <a href="/" class="nav-logo">
+            EDOM<span> UPS </span>Tegal
+        </a>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
+        <div class="nav-cta">
+            <a href="/" class="btn-ghost">
+                Beranda
             </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
         </div>
-    </form>
-</x-guest-layout>
+    </nav>
+
+    <section class="auth-section">
+
+        <div class="auth-card auth-card-lg fade-up">
+
+            <div class="auth-header">
+
+                <span class="section-label">
+                    REGISTRASI
+                </span>
+
+                <h1 class="auth-title">
+                    Bergabung dengan <span>EDOM</span>
+                </h1>
+
+                <p class="auth-subtitle">
+                    Buat akun mahasiswa untuk memberikan ulasan dosen dan mata kuliah secara anonim.
+                </p>
+
+            </div>
+
+            <form method="POST" action="{{ route('register') }}">
+
+                @csrf
+
+                {{-- Nama --}}
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Nama lengkap"
+                        required
+                    >
+
+                    @error('name')
+                        <small class="error-text">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                {{-- NIM --}}
+                <div class="form-group">
+                    <label>NIM</label>
+
+                    <input
+                        type="text"
+                        name="nim"
+                        value="{{ old('nim') }}"
+                        placeholder="Contoh: 230101001"
+                        required
+                    >
+
+                    @error('nim')
+                        <small class="error-text">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                {{-- Email --}}
+                <div class="form-group">
+                    <label>Email Kampus</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value="{{ old('email') }}"
+                        placeholder="nama@student.upstegal.ac.id"
+                        required
+                    >
+
+                    @error('email')
+                        <small class="error-text">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                {{-- Angkatan --}}
+                <div class="form-group">
+                    <label>Angkatan</label>
+
+                    <input
+                        type="number"
+                        name="angkatan"
+                        value="{{ old('angkatan') }}"
+                        placeholder="2023"
+                        required
+                    >
+
+                    @error('angkatan')
+                        <small class="error-text">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                {{-- Jurusan --}}
+                <div class="form-group">
+                    <label>Jurusan</label>
+
+                    <select name="jurusan_id" required>
+
+                        <option value="">
+                            Pilih Jurusan
+                        </option>
+
+                        @foreach($jurusans as $jurusan)
+
+                            <option
+                                value="{{ $jurusan->id }}"
+                                @selected(old('jurusan_id') == $jurusan->id)
+                            >
+                                {{ $jurusan->nama }}
+                            </option>
+
+                        @endforeach
+
+                    </select>
+
+                    @error('jurusan_id')
+                        <small class="error-text">{{ $message }}</small>
+                    @enderror
+
+                </div>
+
+                {{-- Password --}}
+                <div class="form-group">
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Minimal 8 karakter"
+                        required
+                    >
+
+                    @error('password')
+                        <small class="error-text">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                {{-- Confirm Password --}}
+                <div class="form-group">
+                    <label>Konfirmasi Password</label>
+
+                    <input
+                        type="password"
+                        name="password_confirmation"
+                        placeholder="Ulangi password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Daftar Sekarang →
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+
+                Sudah punya akun?
+
+                <a href="{{ route('login') }}">
+                    Masuk
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>
