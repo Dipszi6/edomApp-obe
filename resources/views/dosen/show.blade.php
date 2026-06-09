@@ -20,12 +20,12 @@
         <a href="/" class="nav-logo">EDOM<span> UPS </span>Tegal</a>
         <div class="nav-cta">
             @auth
-                <a href="{{ Auth::user()->role === 'admin' ? route('dashboard.admin') : (Auth::user()->role === 'dosen' ? route('dashboard.dosen') : '/') }}" class="btn-ghost">
+                <a href="{{ Auth::user()->role === 'admin' ? route('dashboard.admin') : (Auth::user()->role === 'dosen' ? route('dashboard.dosen') : 'dashboard.dosen') }}" class="btn-ghost">
                     Dashboard
                 </a>
                 <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                     @csrf
-                    <button type="submit" class="btn-ghost" style="cursor:pointer;background:transparent;">Keluar</button>
+                    <button type="submit" class="btn-ghost" style="cursor:pointer;background:transparent;">Logout</button>
                 </form>
             @else
                 <a href="{{ route('login') }}" class="btn-ghost">Masuk</a>
@@ -218,7 +218,7 @@
             </div>
 
             {{-- ═══ ULASAN ═══ --}}
-            <div class="fade-up">
+            <div class="fade-up" id="ulasan">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
                     <h2 style="font-family:'Poppins',sans-serif;font-weight:700;font-size:1.3rem;">
                         Ulasan Mahasiswa

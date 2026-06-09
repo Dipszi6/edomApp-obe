@@ -45,7 +45,10 @@ Route::middleware(['auth'])->group(function () {
 
 // DOSEN
 Route::middleware(['auth', 'role:dosen'])->prefix('dashboard')->group(function () {
+    Route::get('/dosen/settings', [DosenDashboardController::class, 'profileSettings'])->name('dosen.settings');
     Route::get('/dosen', [DosenDashboardController::class, 'index'])->name('dashboard.dosen');
+    Route::put('/dosen/settings/update', [DosenDashboardController::class, 'updateProfile'])->name('dosen.profile.update');
+    Route::put('/dosen/password/update', [DosenDashboardController::class, 'updatePassword'])->name('dosen.password.update');
 });
 
 // ADMIN

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
         'resources/js/dashboard.js'
     ])
 </head>
+
 <body class="dashboard-body">
 
     <div class="orb orb-1" style="position:fixed;z-index:0;"></div>
@@ -42,24 +44,18 @@
             <i data-lucide="layout-dashboard" class="sidebar-icon"></i> Dashboard
         </a>
         <a href="/dosen/{{ auth()->user()->dosen->id ?? $dosen->id }}" class="sidebar-item">
-            <i data-lucide="user-circle" class="sidebar-icon"></i> Profil Dosen
+            <i data-lucide="user-circle" class="sidebar-icon"></i> Profil Anda
         </a>
         <a href="#ulasan" class="sidebar-item">
-            <i data-lucide="message-square" class="sidebar-icon"></i> Ulasan Saya
+            <i data-lucide="message-square" class="sidebar-icon"></i> Ulasan Anda
         </a>
         <a href="#statistik" class="sidebar-item">
-            <i data-lucide="bar-chart-2" class="sidebar-icon"></i> Statistik Saya
-        </a>
-        <a href="#matkul" class="sidebar-item">
-            <i data-lucide="book-open" class="sidebar-icon"></i> Mata Kuliah
+            <i data-lucide="bar-chart-2" class="sidebar-icon"></i> Statistik Anda
         </a>
 
         <span class="sidebar-section-label">Lainnya</span>
 
-        <a href="/search" class="sidebar-item">
-            <i data-lucide="bell" class="sidebar-icon"></i> Notifikasi
-        </a>
-        <a href="/search" class="sidebar-item">
+        <a href="{{ route('dosen.settings') }}" class="sidebar-item">
             <i data-lucide="settings" class="sidebar-icon"></i> Pengaturan
         </a>
 
@@ -79,34 +75,20 @@
 
         {{-- Topbar --}}
         <div class="topbar">
-            <div class="topbar-search">
-                <i data-lucide="search" class="topbar-search-icon"></i>
-                <input type="text" placeholder="Cari dosen atau mata kuliah...">
-            </div>
             <div class="topbar-right">
-                <a href="#" class="topbar-notif">
+                <a href="#ulasan" class="topbar-notif">
                     <i data-lucide="bell" style="width:18px;height:18px;"></i>
-                    <span class="notif-badge">{{ $reviews->count() }}</span>
+                    @if($notifCount > 0)
+                        <span class="notif-badge">{{ $notifCount }}</span>
+                    @endif
                 </a>
             </div>
         </div>
 
         {{-- Page Header --}}
-        <div class="page-header fade-up">
+        <div class="page-header fade-up" id="statistik">
             <h1>Halo, <span>{{ $dosen->nama }}</span></h1>
             <p>Terima kasih sudah menjadi bagian dari komunitas yang membantu meningkatkan kualitas pendidikan.</p>
-        </div>
-
-        {{-- Action Buttons --}}
-        <div class="action-row fade-up">
-            <a href="/search" class="btn-action btn-action-ghost">
-                <i data-lucide="search" style="width:16px;height:16px;"></i>
-                Cari Dosen / Matkul
-            </a>
-            <a href="{{ route('review.create') }}" class="btn-action btn-action-primary">
-                <i data-lucide="pencil" style="width:16px;height:16px;"></i>
-                Tulis Ulasan
-            </a>
         </div>
 
         {{-- Stat Cards --}}
@@ -117,7 +99,9 @@
                 </div>
                 <div class="stat-card-info">
                     <div class="stat-card-label">Jumlah Mata Kuliah</div>
-                    <div class="stat-card-value">{{ $dosen->total_review > 0 ? $reviews->pluck('matkul_id')->filter()->unique()->count() : 0 }}</div>
+                    <div class="stat-card-value">
+                        {{ $dosen->total_review > 0 ? $reviews->pluck('matkul_id')->filter()->unique()->count() : 0 }}
+                    </div>
                     <div class="stat-card-sub">Mata kuliah diampu</div>
                 </div>
             </div>
@@ -156,7 +140,8 @@
             </div>
         </div>
 
-        <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;margin-bottom:1.25rem;" class="fade-up">
+        <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;margin-bottom:1.25rem;"
+            class="fade-up">
             Dosen Dashboard
         </h2>
 
@@ -165,35 +150,6 @@
 
             {{-- LEFT COLUMN --}}
             <div style="display:flex;flex-direction:column;gap:1.25rem;">
-
-                {{-- Aktivitas Terkini --}}
-                <div class="panel">
-                    <div class="panel-header">
-                        <div class="panel-title">Aktivitas Terkini</div>
-                        <a href="#" class="panel-link">Lihat semua aktivitas →</a>
-                    </div>
-                    <div class="panel-body">
-                        @forelse($reviews->take(4) as $review)
-                        <div class="activity-item">
-                            <div class="activity-dot">
-                                <i data-lucide="file-pen" style="width:16px;height:16px;color:var(--canary);"></i>
-                            </div>
-                            <div class="activity-content">
-                                <div class="activity-text">
-                                    Kamu menerima review untuk
-                                    <strong>{{ $review->matkul ? $review->matkul->nama : 'Profil Dosen' }}</strong>
-                                </div>
-                                <div class="activity-time">{{ $review->created_at->diffForHumans() }}</div>
-                            </div>
-                        </div>
-                        @empty
-                        <p style="color:rgba(255,255,255,0.35);font-size:0.85rem;text-align:center;padding:1rem 0;">
-                            Belum ada aktivitas.
-                        </p>
-                        @endforelse
-                    </div>
-                </div>
-
                 {{-- Review Terbaru --}}
                 <div class="panel" id="ulasan">
                     <div class="panel-header">
@@ -201,74 +157,52 @@
                             Review Terbaru Tentang Anda
                             <span>({{ $reviews->count() }})</span>
                         </div>
-                        <a href="/dosen/{{ $dosen->id }}" class="panel-link">Lihat Semua</a>
+                        <a href="/dosen/{{ $dosen->id }}#ulasan" class="panel-link">Lihat Semua</a>
                     </div>
                     <div class="panel-body">
                         @forelse($reviews->take(5) as $review)
-                        <div class="review-item">
-                            <div class="review-item-header">
-                                <div>
-                                    <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.2rem;">
-                                        <span class="stars" style="display:inline-flex;gap:1px;align-items:center;">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= $review->rating)
-                                                    <i data-lucide="star" style="width:14px;height:14px;fill:var(--canary);color:var(--canary);"></i>
-                                                @else
-                                                    <i data-lucide="star" style="width:14px;height:14px;color:rgba(255,255,255,0.2);"></i>
-                                                @endif
-                                            @endfor
-                                        </span>
-                                        <span class="stars-num">{{ $review->rating }}.0</span>
+                            <div class="review-item">
+                                <div class="review-item-header">
+                                    <div>
+                                        <div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.2rem;">
+                                            <span class="stars" style="display:inline-flex;gap:1px;align-items:center;">
+                                                @for($i = 1; $i <= 5; $i++)
+                                                    @if($i <= $review->rating)
+                                                        <i data-lucide="star"
+                                                            style="width:14px;height:14px;fill:var(--canary);color:var(--canary);"></i>
+                                                    @else
+                                                        <i data-lucide="star"
+                                                            style="width:14px;height:14px;color:rgba(255,255,255,0.2);"></i>
+                                                    @endif
+                                                @endfor
+                                            </span>
+                                            <span class="stars-num">{{ $review->rating }}.0</span>
+                                        </div>
+                                        <div class="review-item-name">
+                                            {{ $review->matkul ? $review->matkul->nama : 'Profil Dosen' }}
+                                        </div>
+                                        <div class="review-item-course">Mata Kuliah</div>
                                     </div>
-                                    <div class="review-item-name">
-                                        {{ $review->matkul ? $review->matkul->nama : 'Profil Dosen' }}
-                                    </div>
-                                    <div class="review-item-course">Mata Kuliah</div>
+                                    <div class="review-item-time">{{ $review->created_at->diffForHumans() }}</div>
                                 </div>
-                                <div class="review-item-time">{{ $review->created_at->diffForHumans() }}</div>
+                                <p class="review-item-text">{{ $review->ulasan }}</p>
+                                @if($review->tags)
+                                    <div class="review-item-tags">
+                                        @foreach($review->tags as $tag)
+                                            <span class="mock-tag">{{ $tag }}</span>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
-                            <p class="review-item-text">{{ $review->ulasan }}</p>
-                            @if($review->tags)
-                            <div class="review-item-tags">
-                                @foreach($review->tags as $tag)
-                                    <span class="mock-tag">{{ $tag }}</span>
-                                @endforeach
-                            </div>
-                            @endif
-                        </div>
                         @empty
-                        <div style="text-align:center;padding:2rem 0;">
-                            <i data-lucide="inbox" style="width:32px;height:32px;color:rgba(255,255,255,0.2);margin-bottom:0.75rem;"></i>
-                            <p style="color:rgba(255,255,255,0.35);font-size:0.85rem;">Belum ada ulasan.</p>
-                        </div>
+                            <div style="text-align:center;padding:2rem 0;">
+                                <i data-lucide="inbox"
+                                    style="width:32px;height:32px;color:rgba(255,255,255,0.2);margin-bottom:0.75rem;"></i>
+                                <p style="color:rgba(255,255,255,0.35);font-size:0.85rem;">Belum ada ulasan.</p>
+                            </div>
                         @endforelse
                     </div>
                 </div>
-
-                {{-- Rekomendasi --}}
-                <div class="panel">
-                    <div class="panel-header">
-                        <div class="panel-title">Rekomendasi Untukmu</div>
-                    </div>
-                    <div class="panel-body" style="padding-bottom:1.5rem;">
-                        <div class="recommend-grid">
-                            @foreach(\App\Models\Matkul::where('jurusan_id', $dosen->jurusan_id)->take(3)->get() as $matkul)
-                            <div class="recommend-card">
-                                <div class="recommend-icon recommend-icon-blue">
-                                    <i data-lucide="book" style="width:20px;height:20px;color:#60a5fa;"></i>
-                                </div>
-                                <div class="recommend-name">{{ Str::limit($matkul->nama, 20) }}</div>
-                                <div class="recommend-sub">{{ $matkul->jurusan->kode ?? '' }}</div>
-                                <div class="recommend-sub" style="margin-bottom:0.75rem;">Belum ada review kamu</div>
-                                <a href="{{ route('review.create', ['matkul_id' => $matkul->id]) }}" class="btn-recommend">
-                                    Beri Ulasan
-                                </a>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             {{-- RIGHT COLUMN --}}
@@ -277,7 +211,8 @@
                 {{-- Profil Dosen --}}
                 <div class="profile-card">
                     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-                        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;">Profil Dosen</span>
+                        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;">Profil
+                            Dosen</span>
                         <a href="/dosen/{{ $dosen->id }}" class="panel-link">Lihat Profil</a>
                     </div>
                     <div class="profile-avatar-lg">
@@ -286,22 +221,26 @@
                     <div class="profile-name">{{ $dosen->nama }}</div>
                     <div class="profile-role">{{ $dosen->gelar ?? 'Dosen' }}</div>
                     <div class="profile-detail-row">
-                        <i data-lucide="id-card" style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
+                        <i data-lucide="id-card"
+                            style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
                         <span>{{ $dosen->nidn }}</span>
                     </div>
                     <div class="profile-detail-row">
-                        <i data-lucide="landmark" style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
+                        <i data-lucide="landmark"
+                            style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
                         <span>{{ $dosen->jurusan->nama ?? '—' }}</span>
                     </div>
                     <div class="profile-detail-row">
-                        <i data-lucide="calendar" style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
+                        <i data-lucide="calendar"
+                            style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
                         <span>Bergabung {{ $dosen->created_at->format('Y') }}</span>
                     </div>
                     @if($dosen->user)
-                    <div class="profile-detail-row">
-                        <i data-lucide="mail" style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
-                        <span>{{ $dosen->user->email }}</span>
-                    </div>
+                        <div class="profile-detail-row">
+                            <i data-lucide="mail"
+                                style="width:14px;height:14px;color:rgba(255,255,255,0.3);flex-shrink:0;"></i>
+                            <span>{{ $dosen->user->email }}</span>
+                        </div>
                     @endif
                 </div>
 
@@ -309,14 +248,13 @@
                 <div class="panel" id="statistik">
                     <div class="panel-header">
                         <div class="panel-title">Mata Kuliah Diampu</div>
-                        <a href="#" class="panel-link">Lihat Semua</a>
                     </div>
                     <div class="panel-body">
                         <div class="rating-bar-group" style="margin-bottom:1.5rem;">
                             @for($star = 5; $star >= 1; $star--)
                                 @php
                                     $count = $reviews->where('rating', $star)->count();
-                                    $pct   = $reviews->count() > 0 ? round(($count / $reviews->count()) * 100) : 0;
+                                    $pct = $reviews->count() > 0 ? round(($count / $reviews->count()) * 100) : 0;
                                 @endphp
                                 <div class="rating-bar-row">
                                     <span class="rating-bar-num">{{ $star }}</span>
@@ -329,33 +267,24 @@
                         </div>
 
                         @foreach(\App\Models\Matkul::where('jurusan_id', $dosen->jurusan_id)->take(4)->get() as $matkul)
-                        <div class="matkul-row" id="matkul">
-                            <div>
-                                <div class="matkul-name">{{ $matkul->nama }}</div>
-                                <div class="matkul-sub">Mata Kuliah Diampu</div>
+                            <div class="matkul-row" id="matkul">
+                                <div>
+                                    <div class="matkul-name">{{ $matkul->nama }}</div>
+                                    <div class="matkul-sub">Mata Kuliah Diampu</div>
+                                </div>
+                                <span class="stars" style="display:inline-flex;gap:1px;align-items:center;">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= round($matkul->avg_rating))
+                                            <i data-lucide="star"
+                                                style="width:11px;height:11px;fill:var(--canary);color:var(--canary);"></i>
+                                        @else
+                                            <i data-lucide="star" style="width:11px;height:11px;color:rgba(255,255,255,0.2);"></i>
+                                        @endif
+                                    @endfor
+                                </span>
                             </div>
-                            <span class="stars" style="display:inline-flex;gap:1px;align-items:center;">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= round($matkul->avg_rating))
-                                        <i data-lucide="star" style="width:11px;height:11px;fill:var(--canary);color:var(--canary);"></i>
-                                    @else
-                                        <i data-lucide="star" style="width:11px;height:11px;color:rgba(255,255,255,0.2);"></i>
-                                    @endif
-                                @endfor
-                            </span>
-                        </div>
                         @endforeach
                     </div>
-                </div>
-
-                {{-- Promo --}}
-                <div class="promo-box">
-                    <h3>Suara Mahasiswa,<br><span>Nyata Adanya.</span></h3>
-                    <p>Berikan penilaian terbaik untuk kampus kita.</p>
-                    <a href="{{ route('review.create') }}" class="btn-action btn-action-primary" style="display:inline-flex;font-size:0.8rem;padding:0.6rem 1.25rem;">
-                        <i data-lucide="pencil" style="width:14px;height:14px;"></i>
-                        Tulis Ulasan
-                    </a>
                 </div>
 
             </div>
@@ -363,4 +292,5 @@
 
     </main>
 </body>
+
 </html>
