@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDOM - UPS TEGAL</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Quicksand:wght@300..700&display=swap"
         rel="stylesheet">
 
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -47,8 +48,8 @@
     <nav>
         <a href="/" class="nav-logo">EDOM<span> UPS </span>Tegal</a>
         <ul class="nav-links">
-            <li><a href="/search">Cari Dosen</a></li>
-            <li><a href="/search?type=matkul">Mata Kuliah</a></li>
+            <li><a href="/search/#dosen">Cari Dosen</a></li>
+            <li><a href="/search/#matkul">Mata Kuliah</a></li>
             <li><a href="#cara-kerja">Cara Kerja</a></li>
         </ul>
         <div class="nav-cta" style="gap: 1rem; display: flex; align-items: center;">
@@ -68,10 +69,13 @@
                         style="display: inline-flex; align-items: center; gap: 0.5rem;">
                         <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i> Dashboard Dosen
                     </a>
-                @else
-                    <a href="/search" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                @elseif(Auth::user()->role === 'mahasiswa')
+                    <a href="{{ route('dashboard.mahasiswa') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                         <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Tulis Ulasan
                     </a>
+                    @else
+                    <a href="/login" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Tulis Ulasan
                 @endif
 
                 <form action="{{ route('logout') }}" method="POST" style="margin: 0; display: inline;">
@@ -91,14 +95,10 @@
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
 
-        <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            Platform ulasan kampus, anonim & jujur
-        </div>
-
         <h1 class="hero-title">
-            Suara Mahasiswa,<br>
-            <span class="accent">Nyata Adanya.</span>
+            Website<br>
+            Evaluasi Dosen,
+            <span class="accent">Oleh Mahasiswa.</span>
         </h1>
 
         <p class="hero-sub">
@@ -347,7 +347,7 @@
                         Cari Komponen <i data-lucide="search" style="width:16px; height:16px;"></i>
                     </a>
                 @endauth
-                <a href="/search" class="btn-hero-ghost">Lihat Ulasan</a>
+                <a href="/login" class="btn-hero-ghost">Lihat Ulasan</a>
             </div>
         </div>
     </section>

@@ -46,7 +46,7 @@
 <div class="divider"></div>
 
 {{-- DOSEN --}}
-<section style="max-width:1200px;margin:auto;">
+<section style="max-width:1200px;margin:auto;" id="dosen">
 
     <div style="margin-bottom:2rem;">
         <span class="section-label">
@@ -120,7 +120,7 @@
 <div class="divider"></div>
 
 {{-- MATKUL --}}
-<section style="max-width:1200px;margin:auto;">
+<section style="max-width:1200px;margin:auto;" id="matkul">
 
     <div style="margin-bottom:2rem;">
         <span class="section-label">

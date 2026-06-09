@@ -12,12 +12,17 @@ use Illuminate\Support\Facades\Auth;
 class ReviewController extends Controller
 {
     public function create(Request $request)
-    {
-        $dosen = $request->dosen_id ? Dosen::findOrFail($request->dosen_id) : null;
-        $matkul = $request->matkul_id ? Matkul::findOrFail($request->matkul_id) : null;
+{
+    // Jika diakses dari tombol ulas spesifik di halaman profil
+    $selectedDosen = $request->dosen_id ? Dosen::find($request->dosen_id) : null;
+    $selectedMatkul = $request->matkul_id ? Matkul::find($request->matkul_id) : null;
 
-        return view('review.create', compact('dosen', 'matkul'));
-    }
+    // AMBIL SEMUA DATA (Untuk opsi pilihan dropdown secara real dari database)
+    $dosens = Dosen::orderBy('nama', 'asc')->get();
+    $matkuls = Matkul::orderBy('nama', 'asc')->get();
+
+    return view('review.create', compact('selectedDosen', 'selectedMatkul', 'dosens', 'matkuls'));
+}
 
     public function store(Request $request)
     {
@@ -47,7 +52,7 @@ class ReviewController extends Controller
             Matkul::find($review->matkul_id)->updateRating();
         }
 
-        return redirect()->back()->with('success', 'Ulasan berhasil dikirim!');
+        return redirect()->route('dashboard.mahasiswa')->with('success', 'Ulasan berhasil dikirim!');
     }
 
     public function upvote($id)

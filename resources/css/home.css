@@ -45,7 +45,7 @@
         }
 
         .nav-logo {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 800;
             font-size: 1.35rem;
             color: var(--white);
@@ -160,37 +160,13 @@
             background: rgba(12,40,112,0.5);
         }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.35rem 1rem;
-            background: var(--canary-dim);
-            border: 1px solid rgba(255,246,78,0.25);
-            border-radius: 999px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--canary);
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 1;
-            animation: fadeUp 0.6s ease both;
-        }
-
-        .hero-badge-dot {
-            width: 6px; height: 6px;
-            background: var(--canary);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
 
         .hero-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: clamp(2.8rem, 7vw, 5.5rem);
             font-weight: 800;
             line-height: 1.05;
@@ -249,7 +225,7 @@
             font-size: 1rem;
             font-weight: 700;
             transition: transform 0.15s, box-shadow 0.2s;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
 
         .btn-hero-primary:hover {
@@ -290,7 +266,7 @@
         }
 
         .stat-num {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 2rem;
             font-weight: 800;
             color: var(--canary);
@@ -384,7 +360,7 @@
             color: var(--ink-black);
             font-weight: 700;
             font-size: 0.875rem;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             transition: background 0.2s;
             margin: 0.3rem;
             border-radius: 8px;
@@ -410,7 +386,7 @@
         }
 
         .section-title {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
             letter-spacing: -0.03em;
@@ -489,7 +465,7 @@
         }
 
         .bento-card h3 {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.15rem;
             font-weight: 700;
             letter-spacing: -0.02em;
@@ -533,7 +509,7 @@
         }
 
         .mock-score {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
             font-weight: 700;
             color: var(--canary);
@@ -645,7 +621,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 800;
             font-size: 1.1rem;
             color: var(--canary);
@@ -653,7 +629,7 @@
         }
 
         .dosen-card h4 {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 0.95rem;
             font-weight: 700;
             margin-bottom: 0.25rem;
@@ -672,7 +648,7 @@
         }
 
         .rating-num {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 800;
             font-size: 1.1rem;
             color: var(--canary);
@@ -709,17 +685,17 @@
         }
 
         .step-number {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 3.5rem;
             font-weight: 800;
-            color: rgba(255,246,78,0.08);
+            color: var(--canary);
             line-height: 1;
             margin-bottom: 1rem;
             letter-spacing: -0.04em;
         }
 
         .step-card h3 {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.05rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
@@ -777,7 +753,7 @@
         }
 
         .footer-logo {
-            font-family: 'Syne', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-weight: 800;
             font-size: 1.1rem;
             color: var(--white);

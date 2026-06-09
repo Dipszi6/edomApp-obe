@@ -10,11 +10,12 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\DosenDashboardController;
 use App\Http\Controllers\Dashboard\AdminDashboardController;
+use App\Http\Controllers\Dashboard\DashboardController;
 
 // PUBLIC
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/search', [SearchController::class, 'index']);
-Route::get('/dosen/{id}', [DosenController::class, 'show']);
+Route::get('/dosen/{id}', [DosenController::class, 'show'])->name('dosen.show');
 Route::get('/matkul/{id}', [MatkulController::class, 'show']);
 
 // GUEST
@@ -32,6 +33,7 @@ Route::post('/logout', [LoginController::class, 'logout'])
 
 // MAHASISWA
 Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
+    Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
     Route::get('/review/create', [ReviewController::class, 'create'])->name('review.create');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
 });
