@@ -198,6 +198,7 @@ EdomApp/
 │   │   │   ├── Dashboard/
 │   │   │   │   ├── AdminDashboardController.php
 │   │   │   │   └── DosenDashboardController.php
+│   │   │   │   └── MahasiswaDashboardController.php
 │   │   │   ├── HomeController.php
 │   │   │   ├── SearchController.php
 │   │   │   ├── DosenController.php
@@ -229,6 +230,7 @@ EdomApp/
 │       ├── dashboard/
 │       │   ├── dosen.blade.php
 │       │   └── admin.blade.php
+│       │   └── mahasiswa.blade.php
 │       ├── dosen/
 │       │   └── show.blade.php
 │       ├── matkul/
@@ -284,16 +286,16 @@ sering_absen     challenging      recommended
 - [x] Models & relasi
 - [x] Seeder & data dummy
 - [x] Controllers & routes
-- [ ] Blade Views
-- [ ] Auth Controllers
-- [ ] Middleware role
+- [x] Blade Views
+- [x] Auth Controllers
+- [x] Middleware role
 - [ ] Testing
 - [ ] Deploy
 ---
  
 ## 📄 Lisensi
  
-Project ini dibuat untuk keperluan akademik — **OBE Gelar Karya 2026**.
+Project ini dibuat untuk keperluan akademik — **Gelar Karya OBE FTIK 2026**.
  
 ---
  
