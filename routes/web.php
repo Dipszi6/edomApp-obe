@@ -11,13 +11,13 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\DosenDashboardController;
 use App\Http\Controllers\Dashboard\AdminDashboardController;
 
-// Public
+// PUBLIC
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/search', [SearchController::class, 'index']);
 Route::get('/dosen/{id}', [DosenController::class, 'show']);
 Route::get('/matkul/{id}', [MatkulController::class, 'show']);
 
-// Auth
+// GUEST
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
@@ -25,24 +25,29 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
 });
 
-Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+// LOGOUT
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
-// Mahasiswa
-Route::middleware('auth')->group(function () {
+// MAHASISWA
+Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('/review/create', [ReviewController::class, 'create'])->name('review.create');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
+});
+
+// UPVOTE
+Route::middleware(['auth'])->group(function () {
     Route::patch('/review/{id}/upvote', [ReviewController::class, 'upvote'])->name('review.upvote');
 });
 
-// Dosen
-Route::middleware(['auth'])->prefix('dashboard')->group(function () {
+// DOSEN
+Route::middleware(['auth', 'role:dosen'])->prefix('dashboard')->group(function () {
     Route::get('/dosen', [DosenDashboardController::class, 'index'])->name('dashboard.dosen');
 });
 
-// Admin
-Route::middleware(['auth'])->prefix('dashboard')->group(function () {
+// ADMIN
+Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->group(function () {
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
     Route::patch('/admin/review/{id}/toggle', [AdminDashboardController::class, 'toggleReview'])->name('admin.review.toggle');
 });
-
-require __DIR__.'/auth.php';

@@ -10,15 +10,40 @@
         href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
         rel="stylesheet">
 
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     @vite([
         'resources/css/home.css',
         'resources/js/home.js'
     ])
+    <style>
+        /* CSS Tambahan Penyelarasan Ikon & Tombol Navbar */
+        .bento-icon lucide-icon,
+        .bento-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke-width: 1.75;
+            color: var(--canary, #fcd34d);
+        }
+
+        .btn-icon {
+            width: 16px;
+            height: 16px;
+            stroke-width: 2;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        nav,
+        .nav-cta {
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- ─── NAVBAR ─── -->
     <nav>
         <a href="/" class="nav-logo">EDOM<span> UPS </span>Tegal</a>
         <ul class="nav-links">
@@ -26,13 +51,33 @@
             <li><a href="/search?type=matkul">Mata Kuliah</a></li>
             <li><a href="#cara-kerja">Cara Kerja</a></li>
         </ul>
-        <div class="nav-cta">
-            <a href="{{ route('login') }}" class="btn-ghost">Masuk</a>
-            <a href="/register" class="btn-primary">Daftar</a>
+        <div class="nav-cta" style="gap: 1rem;">
+            @guest
+                <a href="{{ route('login') }}" class="btn-ghost">Masuk</a>
+                <a href="/register" class="btn-primary">Daftar</a>
+            @endguest
+
+            @auth
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('dashboard.admin') }}" class="btn-primary"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i> Panel Admin
+                    </a>
+                @elseif(Auth::user()->role === 'dosen')
+                    <a href="{{ route('dashboard.dosen') }}" class="btn-primary"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i> Dashboard Dosen
+                    </a>
+                @else
+                    <!-- Mahasiswa diarahkan ke halaman pencarian untuk menulis ulasan -->
+                    <a href="/search" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Tulis Ulasan
+                    </a>
+                @endif
+            @endauth
         </div>
     </nav>
 
-    <!-- ─── HERO ─── -->
     <section class="hero">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -54,8 +99,22 @@
         </p>
 
         <div class="hero-actions">
-            <a href="/search" class="btn-hero-primary">Cari Dosen →</a>
-            <a href="/register" class="btn-hero-ghost">Mulai Beri Ulasan</a>
+            <a href="/search" class="btn-hero-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                Cari Dosen <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>
+            </a>
+
+            @guest
+                <a href="/register" class="btn-hero-ghost">Mulai Beri Ulasan</a>
+            @endguest
+            @auth
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('dashboard.admin') }}" class="btn-hero-ghost">Kelola Ulasan</a>
+                @elseif (Auth::user()->role === 'dosen')
+                    <a href="{{ route('dashboard.dosen') }}" class="btn-hero-ghost">Lihat Statistik</a>
+                @else
+                    <a href="/search" class="btn-hero-ghost">Mulai Beri Ulasan</a>
+                @endif
+            @endauth
         </div>
 
         <div class="hero-stats">
@@ -79,7 +138,6 @@
         </div>
     </section>
 
-    <!-- ─── SEARCH ─── -->
     <div class="search-section">
         <form action="/search" method="GET" style="width:100%;max-width:640px;">
             <div class="search-box">
@@ -89,7 +147,6 @@
         </form>
     </div>
 
-    <!-- ─── BENTO FEATURES ─── -->
     <section class="bento-section">
         <div class="bento-header">
             <span class="section-label">Fitur Platform</span>
@@ -100,9 +157,8 @@
 
         <div class="bento-grid">
 
-            <!-- Rating Dosen -->
             <div class="bento-card span-7 fade-up">
-                <div class="bento-icon">⭐</div>
+                <div class="bento-icon"><i data-lucide="star"></i></div>
                 <h3>Rating Dosen & Mata Kuliah</h3>
                 <p>Beri penilaian dari 1–5 bintang. Rata-rata rating diperbarui otomatis setiap ada ulasan baru.</p>
                 <div class="mock-rating">
@@ -120,9 +176,8 @@
                 </div>
             </div>
 
-            <!-- Anonim -->
             <div class="bento-card span-5 fade-up">
-                <div class="bento-icon">🔒</div>
+                <div class="bento-icon"><i data-lucide="shield-check"></i></div>
                 <h3>100% Anonim</h3>
                 <p>Identitasmu tidak akan pernah ditampilkan. Berikan pendapat jujur tanpa rasa khawatir.</p>
                 <div class="mock-tags" style="margin-top:2rem;">
@@ -135,9 +190,8 @@
                 </div>
             </div>
 
-            <!-- Distribusi Rating -->
             <div class="bento-card span-4 fade-up">
-                <div class="bento-icon">📊</div>
+                <div class="bento-icon"><i data-lucide="bar-chart-3"></i></div>
                 <h3>Distribusi Rating</h3>
                 <p>Lihat sebaran bintang secara visual untuk setiap dosen.</p>
                 <div class="mock-bar-group">
@@ -179,16 +233,14 @@
                 </div>
             </div>
 
-            <!-- Upvote -->
             <div class="bento-card span-4 fade-up">
-                <div class="bento-icon">👍</div>
+                <div class="bento-icon"><i data-lucide="thumbs-up"></i></div>
                 <h3>Upvote Ulasan</h3>
                 <p>Ulasan yang paling membantu naik ke atas. Satu vote per pengguna untuk menjaga integritas.</p>
             </div>
 
-            <!-- Search -->
             <div class="bento-card span-4 fade-up">
-                <div class="bento-icon">🔍</div>
+                <div class="bento-icon"><i data-lucide="search"></i></div>
                 <h3>Cari & Filter</h3>
                 <p>Filter berdasarkan nama dosen, mata kuliah, atau jurusan. Temukan yang kamu cari dalam hitungan
                     detik.</p>
@@ -199,7 +251,6 @@
 
     <div class="divider"></div>
 
-    <!-- ─── TOP DOSENS ─── -->
     @if($topDosens->count())
         <div class="cards-section">
             <div class="cards-header">
@@ -207,7 +258,8 @@
                     <span class="section-label">Top Rating</span>
                     <h2 class="section-title">Dosen Terbaik<br>Bulan Ini</h2>
                 </div>
-                <a href="/search">Lihat semua →</a>
+                <a href="/search" style="display: inline-flex; align-items: center; gap: 0.25rem;">Lihat semua <i
+                        data-lucide="arrow-right" style="width:14px; height:14px;"></i></a>
             </div>
 
             <div class="cards-grid">
@@ -235,7 +287,6 @@
 
     <div class="divider"></div>
 
-    <!-- ─── HOW IT WORKS ─── -->
     <section class="steps-section" id="cara-kerja">
         <div>
             <span class="section-label">Cara Kerja</span>
@@ -267,7 +318,6 @@
         </div>
     </section>
 
-    <!-- ─── CTA ─── -->
     <section class="cta-section">
         <div class="cta-bg"></div>
         <div style="position:relative;z-index:1;">
@@ -277,24 +327,42 @@
             <p class="section-sub">Bergabunglah dan bantu sesama mahasiswa membuat keputusan akademik yang lebih cerdas.
             </p>
             <div class="cta-actions">
-                <a href="/register" class="btn-hero-primary">Daftar Gratis →</a>
+                @guest
+                    <a href="/register" class="btn-hero-primary"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        Daftar Gratis <i data-lucide="arrow-right" style="width:16px; height:16px;"></i>
+                    </a>
+                @endguest
+                @auth
+                    <a href="/search" class="btn-hero-primary"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        Cari Komponen <i data-lucide="search" style="width:16px; height:16px;"></i>
+                    </a>
+                @endauth
                 <a href="/search" class="btn-hero-ghost">Lihat Ulasan</a>
             </div>
         </div>
     </section>
 
-    <!-- ─── FOOTER ─── -->
     <footer>
         <div class="footer-logo">EDOM<span> UPS </span>Tegal</div>
         <nav>
             <a href="/search">Cari Dosen</a>
-            <a href="/login">Masuk</a>
-            <a href="/register">Daftar</a>
+            @guest
+                <a href="/login">Masuk</a>
+                <a href="/register">Daftar</a>
+            @endguest
+            @auth
+                <a href="/search">Tulis Ulasan</a>
+            @endauth
         </nav>
         <p class="footer-copy">© {{ date('Y') }} EDOM-UPSTEGAL · Dibuat oleh Kelompok 3</p>
     </footer>
 
-
+    <script>
+        // Jalankan parser Lucide Icons di akhir body
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>
