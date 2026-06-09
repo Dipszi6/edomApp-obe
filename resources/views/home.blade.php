@@ -51,7 +51,7 @@
             <li><a href="/search?type=matkul">Mata Kuliah</a></li>
             <li><a href="#cara-kerja">Cara Kerja</a></li>
         </ul>
-        <div class="nav-cta" style="gap: 1rem;">
+        <div class="nav-cta" style="gap: 1rem; display: flex; align-items: center;">
             @guest
                 <a href="{{ route('login') }}" class="btn-ghost">Masuk</a>
                 <a href="/register" class="btn-primary">Daftar</a>
@@ -69,11 +69,19 @@
                         <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i> Dashboard Dosen
                     </a>
                 @else
-                    <!-- Mahasiswa diarahkan ke halaman pencarian untuk menulis ulasan -->
                     <a href="/search" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
                         <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Tulis Ulasan
                     </a>
                 @endif
+
+                <form action="{{ route('logout') }}" method="POST" style="margin: 0; display: inline;">
+                    @csrf
+                    <button type="submit" class="btn-primary"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; border: none; background: none; padding: 0.5rem 1rem;">
+                        <i data-lucide="log-out" style="width: 16px; height: 16px; color: #ef4444;"></i>
+                        <span style="color: #ef4444;">Keluar</span>
+                    </button>
+                </form>
             @endauth
         </div>
     </nav>
