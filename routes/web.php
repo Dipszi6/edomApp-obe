@@ -4,13 +4,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\DosenController;
-use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\Dashboard\MatkulController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\DosenDashboardController;
 use App\Http\Controllers\Dashboard\AdminDashboardController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\UserController;
 
 // PUBLIC
 Route::get('/', [HomeController::class, 'index']);
@@ -34,6 +35,9 @@ Route::post('/logout', [LoginController::class, 'logout'])
 // MAHASISWA
 Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa'])->name('dashboard.mahasiswa');
+    Route::get('/dashboard/mahasiswa/settings', [DashboardController::class, 'settings'])->name('mahasiswa.settings');
+    Route::put('/dashboard/mahasiswa/settings/update', [DashboardController::class, 'updateProfile'])->name('mahasiswa.profile.update');
+    Route::put('/dashboard/mahasiswa/password/update', [DashboardController::class, 'updatePassword'])->name('mahasiswa.password.update');
     Route::get('/review/create', [ReviewController::class, 'create'])->name('review.create');
     Route::post('/review', [ReviewController::class, 'store'])->name('review.store');
 });
@@ -45,8 +49,8 @@ Route::middleware(['auth'])->group(function () {
 
 // DOSEN
 Route::middleware(['auth', 'role:dosen'])->prefix('dashboard')->group(function () {
-    Route::get('/dosen/settings', [DosenDashboardController::class, 'profileSettings'])->name('dosen.settings');
     Route::get('/dosen', [DosenDashboardController::class, 'index'])->name('dashboard.dosen');
+    Route::get('/dosen/settings', [DosenDashboardController::class, 'profileSettings'])->name('dosen.settings');
     Route::put('/dosen/settings/update', [DosenDashboardController::class, 'updateProfile'])->name('dosen.profile.update');
     Route::put('/dosen/password/update', [DosenDashboardController::class, 'updatePassword'])->name('dosen.password.update');
 });
@@ -55,4 +59,8 @@ Route::middleware(['auth', 'role:dosen'])->prefix('dashboard')->group(function (
 Route::middleware(['auth', 'role:admin'])->prefix('dashboard')->group(function () {
     Route::get('/admin', [AdminDashboardController::class, 'index'])->name('dashboard.admin');
     Route::patch('/admin/review/{id}/toggle', [AdminDashboardController::class, 'toggleReview'])->name('admin.review.toggle');
+
+    Route::resource('users', UserController::class);
+
+    Route::resource('matkul', \App\Http\Controllers\Dashboard\MatkulController::class);
 });

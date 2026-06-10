@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Matkul extends Model
 {
@@ -12,6 +14,7 @@ class Matkul extends Model
         'sks',
         'semester',
         'jurusan_id',
+        'dosen_id', // Tambahkan ini agar bisa terhubung ke dosen
         'avg_rating',
         'total_review',
     ];
@@ -20,16 +23,33 @@ class Matkul extends Model
         'avg_rating' => 'float',
     ];
 
-    public function jurusan()
+    /**
+     * Relasi ke Jurusan
+     */
+    public function jurusan(): BelongsTo
     {
         return $this->belongsTo(Jurusan::class);
     }
 
-    public function reviews()
+    /**
+     * Relasi ke Dosen (Mata kuliah diampu oleh dosen)
+     */
+    public function dosen(): BelongsTo
+    {
+        return $this->belongsTo(Dosen::class);
+    }
+
+    /**
+     * Relasi ke Review
+     */
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
+    /**
+     * Update rating dan jumlah review secara otomatis
+     */
     public function updateRating(): void
     {
         $this->avg_rating = $this->reviews()->avg('rating') ?? 0;

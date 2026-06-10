@@ -83,19 +83,14 @@
         <a href="#ulasan" class="sidebar-item">
             <i data-lucide="message-square-dashed" class="sidebar-icon"></i> Moderasi Ulasan
         </a>
-        <a href="/search#dosen" class="sidebar-item">
-            <i data-lucide="graduation-cap" class="sidebar-icon"></i> Data Dosen
-        </a>
-        <a href="/search#matkul" class="sidebar-item">
-            <i data-lucide="book-open" class="sidebar-icon"></i> Data Matkul
-        </a>
-        <a href="#users" class="sidebar-item">
-            <i data-lucide="users" class="sidebar-icon"></i> Data User
-        </a>
-
+        
         <span class="sidebar-section-label">Sistem</span>
-        <a href="/search" class="sidebar-item">
-            <i data-lucide="settings" class="sidebar-icon"></i> Pengaturan
+        
+        <a href="{{ route('matkul.index') }}" class="sidebar-item">
+            <i data-lucide="book-open" class="sidebar-icon"></i> Kelola Matkul
+        </a>
+        <a href="{{ route('users.index') }}" class="sidebar-item">
+            <i data-lucide="users" class="sidebar-icon"></i> Kelola User
         </a>
 
         <div class="sidebar-bottom">

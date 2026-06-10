@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rules\Password;
+use App\Models\User;
+use App\Models\Dosen;
 
 class DosenDashboardController extends Controller
 {
@@ -30,7 +32,10 @@ class DosenDashboardController extends Controller
             ->where('created_at', '>', Auth::user()->updated_at)
             ->count();
 
-        Auth::user()->touch();
+        $user = \App\Models\User::find(Auth::id());
+        if ($user) {
+            $user->touch();
+        }
 
         return view('dashboard.dosen', compact('dosen', 'reviews', 'notifCount'));
     }

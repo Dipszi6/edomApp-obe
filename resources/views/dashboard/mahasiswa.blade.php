@@ -666,7 +666,7 @@
         <span class="sidebar-section-label">Akun</span>
 
         <!-- Pengaturan -icon + routes -->
-        <a href="{{ route('dashboard.mahasiswa') }}" class="sidebar-item">
+        <a href="{{ route('mahasiswa.settings') }}" class="sidebar-item">
             <i data-lucide="settings" class="sidebar-icon"></i> Pengaturan
         </a> 
         <!--  -->
