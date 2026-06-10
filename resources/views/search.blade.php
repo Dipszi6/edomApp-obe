@@ -25,7 +25,7 @@
             Kembali
         </a>
         @else
-        <a href="{{ route('login') }}" class="btn-ghost">
+        <a href="/" class="btn-ghost">
             kembali
         </a>
         @endauth
