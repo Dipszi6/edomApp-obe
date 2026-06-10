@@ -16,8 +16,7 @@
 
     @vite([
         'resources/css/home.css',
-        'resources/css/dashboard.css',
-        'resources/js/dashboard.js'
+        'resources/css/dashboard.css'
     ])
     <style>
         /* Tambahan style untuk ulasan tersembunyi agar tidak tabrakan dengan JavaScript */
@@ -115,11 +114,6 @@
 
         {{-- Topbar --}}
         <div class="topbar">
-            <div class="topbar-search">
-                <i data-lucide="search" class="topbar-search-icon"
-                    style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5;"></i>
-                <input type="text" placeholder="Cari ulasan, dosen, matkul..." style="padding-left: 38px;">
-            </div>
             <div class="topbar-right">
                 <a href="#" class="topbar-notif" style="display: flex; align-items: center; position: relative;">
                     <i data-lucide="bell"></i>
@@ -395,6 +389,47 @@
         </div>
     </main>
 
+    <script>
+    // DOMContentLoaded untuk inisialisasi (bukan filterReviews)
+    document.addEventListener('DOMContentLoaded', function () {
+        lucide.createIcons();
+ 
+        // Fade up animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    });
+ 
+    // filterReviews HARUS global (di luar wrapper apapun)
+    // karena dipanggil via onclick="..." di HTML
+    function filterReviews(type, btn) {
+        // Toggle active state pada tombol filter
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+ 
+        // Show/hide review items berdasarkan data-visible
+        document.querySelectorAll('.review-item').forEach(item => {
+            if (type === 'all') {
+                item.style.setProperty('display', '', 'important');
+            } else {
+                item.style.setProperty(
+                    'display',
+                    item.dataset.visible === type ? '' : 'none',
+                    'important'
+                );
+            }
+        });
+ 
+        // Re-render lucide icons setelah DOM dimanipulasi
+        lucide.createIcons();
+    }
+</script>
 </body>
 
 </html>

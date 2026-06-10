@@ -71,7 +71,7 @@
                     </a>
                 @elseif(Auth::user()->role === 'mahasiswa')
                     <a href="{{ route('dashboard.mahasiswa') }}" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
-                        <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Tulis Ulasan
+                        <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i> Dashboard Mahasiswa
                     </a>
                     @else
                     <a href="/login" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
@@ -140,7 +140,7 @@
             </div>
         </div>
 
-        <div class="scroll-hint">
+        <div class="scroll-hint" id="search">
             <span>Scroll</span>
             <div class="scroll-line"></div>
         </div>
