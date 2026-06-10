@@ -20,9 +20,15 @@
     </a>
 
     <div class="nav-cta">
-        <a href="/" class="btn-ghost">
+        @auth
+        <a href="{{ Auth::user()->role === 'admin' ? route('dashboard.admin') : (Auth::user()->role === 'dosen' ? route('dashboard.dosen') : (Auth::user()->role === 'mahasiswa' ? route('dashboard.mahasiswa') : 'dashboard.mahasiswa')) }}" class="btn-ghost">
             Kembali
         </a>
+        @else
+        <a href="{{ route('login') }}" class="btn-ghost">
+            kembali
+        </a>
+        @endauth
     </div>
 </nav>
 

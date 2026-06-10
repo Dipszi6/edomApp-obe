@@ -83,10 +83,10 @@
         <a href="#ulasan" class="sidebar-item">
             <i data-lucide="message-square-dashed" class="sidebar-icon"></i> Moderasi Ulasan
         </a>
-        <a href="#dosen" class="sidebar-item">
+        <a href="/search#dosen" class="sidebar-item">
             <i data-lucide="graduation-cap" class="sidebar-icon"></i> Data Dosen
         </a>
-        <a href="#matkul" class="sidebar-item">
+        <a href="/search#matkul" class="sidebar-item">
             <i data-lucide="book-open" class="sidebar-icon"></i> Data Matkul
         </a>
         <a href="#users" class="sidebar-item">

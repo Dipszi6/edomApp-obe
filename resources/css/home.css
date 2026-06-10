@@ -431,12 +431,6 @@
             position: relative;
         }
 
-        .bento-card:hover {
-            border-color: rgba(255,246,78,0.2);
-            background: rgba(6,26,84,0.5);
-            transform: translateY(-3px);
-        }
-
         .bento-card::before {
             content: '';
             position: absolute;
