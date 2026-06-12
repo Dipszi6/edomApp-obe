@@ -83,9 +83,9 @@
         <a href="#ulasan" class="sidebar-item">
             <i data-lucide="message-square-dashed" class="sidebar-icon"></i> Moderasi Ulasan
         </a>
-        
+
         <span class="sidebar-section-label">Sistem</span>
-        
+
         <a href="{{ route('matkul.index') }}" class="sidebar-item">
             <i data-lucide="book-open" class="sidebar-icon"></i> Kelola Matkul
         </a>
@@ -251,19 +251,19 @@
                                         @method('PATCH')
                                         <button type="submit"
                                             class="btn-action {{ $review->is_visible ? '' : 'btn-action-ghost' }}" style="
-                                                display: inline-flex;
-                                                align-items: center;
-                                                gap: 0.35rem;
-                                                padding:0.35rem 0.9rem;
-                                                font-size:0.75rem;
-                                                border-radius:8px;
-                                                background:{{ $review->is_visible ? 'rgba(239,68,68,0.1)' : 'rgba(34,197,94,0.1)' }};
-                                                border:1px solid {{ $review->is_visible ? 'rgba(239,68,68,0.25)' : 'rgba(34,197,94,0.25)' }};
-                                                color:{{ $review->is_visible ? '#fca5a5' : '#86efac' }};
-                                                cursor:pointer;
-                                                font-family:'DM Sans',sans-serif;
-                                                font-weight:600;
-                                            ">
+                                                    display: inline-flex;
+                                                    align-items: center;
+                                                    gap: 0.35rem;
+                                                    padding:0.35rem 0.9rem;
+                                                    font-size:0.75rem;
+                                                    border-radius:8px;
+                                                    background:{{ $review->is_visible ? 'rgba(239,68,68,0.1)' : 'rgba(34,197,94,0.1)' }};
+                                                    border:1px solid {{ $review->is_visible ? 'rgba(239,68,68,0.25)' : 'rgba(34,197,94,0.25)' }};
+                                                    color:{{ $review->is_visible ? '#fca5a5' : '#86efac' }};
+                                                    cursor:pointer;
+                                                    font-family:'DM Sans',sans-serif;
+                                                    font-weight:600;
+                                                ">
                                             <i data-lucide="{{ $review->is_visible ? 'eye-off' : 'eye' }}"
                                                 style="width: 14px; height: 14px;"></i>
                                             {{ $review->is_visible ? 'Sembunyikan' : 'Tampilkan' }}
@@ -385,46 +385,44 @@
     </main>
 
     <script>
-    // DOMContentLoaded untuk inisialisasi (bukan filterReviews)
-    document.addEventListener('DOMContentLoaded', function () {
-        lucide.createIcons();
- 
-        // Fade up animation
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
-                    observer.unobserve(entry.target);
+        // DOMContentLoaded untuk inisialisasi (bukan filterReviews)
+        document.addEventListener('DOMContentLoaded', function () {
+            lucide.createIcons();
+
+            // Fade up animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, i) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08 });
+            document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        });
+
+        function filterReviews(type, btn) {
+            // Toggle active state pada tombol filter
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Show/hide review items berdasarkan data-visible
+            document.querySelectorAll('.review-item').forEach(item => {
+                if (type === 'all') {
+                    item.style.setProperty('display', '', 'important');
+                } else {
+                    item.style.setProperty(
+                        'display',
+                        item.dataset.visible === type ? '' : 'none',
+                        'important'
+                    );
                 }
             });
-        }, { threshold: 0.08 });
-        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-    });
- 
-    // filterReviews HARUS global (di luar wrapper apapun)
-    // karena dipanggil via onclick="..." di HTML
-    function filterReviews(type, btn) {
-        // Toggle active state pada tombol filter
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
- 
-        // Show/hide review items berdasarkan data-visible
-        document.querySelectorAll('.review-item').forEach(item => {
-            if (type === 'all') {
-                item.style.setProperty('display', '', 'important');
-            } else {
-                item.style.setProperty(
-                    'display',
-                    item.dataset.visible === type ? '' : 'none',
-                    'important'
-                );
-            }
-        });
- 
-        // Re-render lucide icons setelah DOM dimanipulasi
-        lucide.createIcons();
-    }
-</script>
+
+            // Re-render lucide icons setelah DOM dimanipulasi
+            lucide.createIcons();
+        }
+    </script>
 </body>
 
 </html>

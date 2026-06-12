@@ -58,9 +58,16 @@
             </div>
         </div>
 
-        <span class="sidebar-section-label">Menu Utama</span>
+        <span class="sidebar-section-label">Manajemen</span>
         <a href="{{ route('dashboard.admin') }}" class="sidebar-item">
             <i data-lucide="layout-dashboard" class="sidebar-icon"></i> Dashboard
+        </a>
+        <a href="{{ route('dashboard.admin') }}#ulasan" class="sidebar-item">
+            <i data-lucide="message-square-dashed" class="sidebar-icon"></i> Moderasi Ulasan
+        </a>
+        <span class="sidebar-section-label">Sistem</span>
+        <a href="{{ route('matkul.index') }}" class="sidebar-item">
+            <i data-lucide="book-open" class="sidebar-icon"></i> Kelola Matkul
         </a>
         <a href="{{ route('users.index') }}" class="sidebar-item active">
             <i data-lucide="users" class="sidebar-icon"></i> Kelola User
@@ -69,7 +76,8 @@
         <div class="sidebar-bottom">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="sidebar-item danger" style="width:100%; border:none; background:none; text-align:left; cursor:pointer;">
+                <button type="submit" class="sidebar-item danger"
+                    style="width:100%; border:none; cursor:pointer; background:none; text-align:left;">
                     <i data-lucide="log-out" class="sidebar-icon"></i> Keluar
                 </button>
             </form>
@@ -135,25 +143,25 @@
 <div id="edit_mahasiswa_fields" class="role-conditional-fields" data-role="mahasiswa" style="display: {{ $user->role === 'mahasiswa' ? 'block' : 'none' }}; width: 100%; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 1rem; margin-top: 0.5rem;">
     <h4 style="margin: 0 0 1rem 0; color: #34d399; font-size: 0.95rem; font-family:'Syne', sans-serif;">Profil Akademik Mahasiswa</h4>
     
-    {{-- Row 1: NIM & Angkatan --}}
+    {{-- Row 1: NIM & Angkatan (Panggil langsung dari $user) --}}
     <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
         <div style="flex: 1;">
-            <label style="color: rgba(255,255,255,0.6); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">NIM (Nomor Induk Mahasiswa)</label>
-            <input type="text" name="nim" id="editNimInput" value="{{ old('nim', $user->mahasiswa->nim ?? '') }}" style="width: 100%; padding: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; box-sizing: border-box;">
+            <label style="color: rgba(255,255,255,0.6); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">NIM</label>
+            <input type="text" name="nim" value="{{ old('nim', $user->nim ?? '') }}" style="width: 100%; padding: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; box-sizing: border-box;">
         </div>
         <div style="flex: 1;">
             <label style="color: rgba(255,255,255,0.6); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">Angkatan</label>
-            <input type="number" name="angkatan" id="editAngkatanInput" placeholder="Contoh: 2023" value="{{ old('angkatan', $user->mahasiswa->angkatan ?? '') }}" style="width: 100%; padding: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; box-sizing: border-box;">
+            <input type="number" name="angkatan" value="{{ old('angkatan', $user->angkatan ?? '') }}" style="width: 100%; padding: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; box-sizing: border-box;">
         </div>
     </div>
 
-    {{-- Row 2: Program Studi / Jurusan Mahasiswa --}}
+    {{-- Row 2: Program Studi --}}
     <div style="width: 100%;">
         <label style="color: rgba(255,255,255,0.6); font-size: 0.85rem; display: block; margin-bottom: 0.3rem;">Program Studi / Jurusan</label>
-        <select name="jurusan_id" id="editMhsJurusanInput" style="width: 100%; padding: 0.7rem; background: rgba(30,30,30,1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; cursor: pointer; box-sizing: border-box;">
+        <select name="jurusan_id" style="width: 100%; padding: 0.7rem; background: rgba(30,30,30,1); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; cursor: pointer; box-sizing: border-box;">
             <option value="">-- Pilih Jurusan Mahasiswa --</option>
             @foreach(\App\Models\Jurusan::all() as $jurusan)
-                <option value="{{ $jurusan->id }}" {{ (old('jurusan_id', $user->mahasiswa->jurusan_id ?? '') == $jurusan->id) ? 'selected' : '' }}>
+                <option value="{{ $jurusan->id }}" {{ (old('jurusan_id', $user->jurusan_id) == $jurusan->id) ? 'selected' : '' }}>
                     {{ $jurusan->nama }}
                 </option>
             @endforeach

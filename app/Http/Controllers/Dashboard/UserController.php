@@ -15,9 +15,18 @@ use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->search;
+
+        $users = User::when($search, function ($query) use ($search) {
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+        })
+            ->orderBy('created_at', 'desc')
+            ->paginate(5)
+            ->withQueryString();
+
         return view('dashboard.admin.users.index', compact('users'));
     }
 
@@ -29,27 +38,27 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'min:8'],
-            'role'     => ['required', 'in:admin,dosen,mahasiswa'],
+            'role' => ['required', 'in:admin,dosen,mahasiswa'],
         ]);
 
         DB::beginTransaction();
         try {
             $user = User::create([
-                'name'     => $request->name,
-                'email'    => $request->email,
+                'name' => $request->name,
+                'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role'     => $request->role,
+                'role' => $request->role,
             ]);
 
             // Jika role-nya dosen, buat entry di tabel dosens
             if ($request->role === 'dosen') {
                 Dosen::create([
-                    'user_id'    => $user->id,
-                    'nama'       => $user->name,
-                    'nidn'       => $request->nidn,
+                    'user_id' => $user->id,
+                    'nama' => $user->name,
+                    'nidn' => $request->nidn,
                     'jurusan_id' => $request->jurusan_id,
                 ]);
             }
@@ -61,7 +70,7 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Gagal: ' . $e->getMessage())->withInput();
         }
     }
-    
+
     public function edit(string $id)
     {
         // Memuat user beserta relasi dosen (jika rolenya dosen)
@@ -72,43 +81,50 @@ class UserController extends Controller
     }
 
     public function update(Request $request, string $id)
-    {
-        $user = User::findOrFail($id);
+{
+    $user = User::findOrFail($id);
 
-        // Validasi & Update
-        $userData = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-            'nim' => ($request->role === 'mahasiswa') ? $request->nim : null,
-            'angkatan' => ($request->role === 'mahasiswa') ? $request->angkatan : null,
-            'jurusan_id' => ($request->role === 'mahasiswa' || $request->role === 'dosen') ? $request->jurusan_id : null,
-        ];
+    // 1. Data dasar User
+    $userData = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'role' => $request->role,
+        'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+    ];
 
-        if ($request->filled('password')) {
-            $userData['password'] = Hash::make($request->password);
+    // 2. Jika Mahasiswa, isi kolomnya. Jika bukan, kosongkan agar bersih
+    $userData['nim'] = ($request->role === 'mahasiswa') ? $request->nim : $user->nim;
+    $userData['angkatan'] = ($request->role === 'mahasiswa') ? $request->angkatan : $user->angkatan;
+    $userData['jurusan_id'] = ($request->role === 'mahasiswa' || $request->role === 'dosen') ? $request->jurusan_id : null;
+
+    $user->update($userData);
+
+    // 3. Penanganan relasi Dosen
+    if ($request->role === 'dosen') {
+        $dosen = Dosen::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'nidn' => $request->nidn, 
+                'gelar' => $request->gelar, 
+                'nama' => $request->name, 
+                'jurusan_id' => $request->jurusan_id
+            ]
+        );
+        
+        if ($request->hasFile('foto')) {
+            if ($dosen->foto) Storage::disk('public')->delete($dosen->foto);
+            $dosen->update(['foto' => $request->file('foto')->store('assets/dosen', 'public')]);
         }
-
-        $user->update($userData);
-
-        // Penanganan relasi Dosen (tetap dipisah karena ada file foto)
-        if ($request->role === 'dosen') {
-            $dosen = Dosen::firstOrNew(['user_id' => $user->id]);
-            $dosen->fill(['nidn' => $request->nidn, 'nama' => $request->name, 'jurusan_id' => $request->jurusan_id]);
-            if ($request->hasFile('foto')) {
-                if ($dosen->foto)
-                    Storage::disk('public')->delete($dosen->foto);
-                $dosen->foto = $request->file('foto')->store('assets/dosen', 'public');
-            }
-            $dosen->save();
-        } else {
-            if ($user->dosen) {
-                $user->dosen->delete();
-            }
+    } else {
+        // Jika berubah role bukan jadi dosen, hapus data dosen jika ada
+        if ($user->dosen) {
+            if ($user->dosen->foto) Storage::disk('public')->delete($user->dosen->foto);
+            $user->dosen->delete();
         }
-
-        return redirect()->route('users.index')->with('success', 'Data berhasil diperbarui!');
     }
+
+    return redirect()->route('users.index')->with('success', 'Data berhasil diperbarui!');
+}
 
     public function destroy(User $user)
     {

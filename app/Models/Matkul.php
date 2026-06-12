@@ -14,7 +14,7 @@ class Matkul extends Model
         'sks',
         'semester',
         'jurusan_id',
-        'dosen_id', // Tambahkan ini agar bisa terhubung ke dosen
+        'dosen_id', 
         'avg_rating',
         'total_review',
     ];
