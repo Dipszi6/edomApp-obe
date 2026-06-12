@@ -199,11 +199,15 @@ EdomApp/
 │   │   │   │   ├── AdminDashboardController.php
 │   │   │   │   └── DosenDashboardController.php
 │   │   │   │   └── MahasiswaDashboardController.php
+│   │   │   │   └── MatkulController.php
+│   │   │   │   └── UserContoller.php
 │   │   │   ├── HomeController.php
 │   │   │   ├── SearchController.php
 │   │   │   ├── DosenController.php
 │   │   │   ├── MatkulController.php
 │   │   │   └── ReviewController.php
+│   │   │   └── SearchController.php
+│   │   │   └── ProfileController.php
 │   │   └── Middleware/
 │   └── Models/
 │       ├── User.php
@@ -212,6 +216,7 @@ EdomApp/
 │       ├── Matkul.php
 │       ├── Review.php
 │       └── ReviewUpvote.php
+│       └── User.php
 ├── database/
 │   ├── migrations/
 │   └── seeders/
@@ -228,9 +233,24 @@ EdomApp/
 │       │   ├── login.blade.php
 │       │   └── register.blade.php
 │       ├── dashboard/
+│       │   │       
+│       │   ├── admin/
+│       │   │   ├── matkul/
+│       │   │   │   └── create.blade.php 
+│       │   │   |   └── edit.blade.php
+│       │   │   |   └── index.blade.php
+│       │   │   |
+|       |   |   ├── users/
+│       │   │       └── create.blade.php 
+│       │   │       └── edit.blade.php
+│       │   │       └── index.blade.php
+│       │   │   
 │       │   ├── dosen.blade.php
 │       │   └── admin.blade.php
 │       │   └── mahasiswa.blade.php
+│       │   └── mahasiswaSettings.blade.php
+│       │   └── dosenSettings.blade.php
+│       │
 │       ├── dosen/
 │       │   └── show.blade.php
 │       ├── matkul/
